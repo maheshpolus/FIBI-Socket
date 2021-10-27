@@ -1,0 +1,18 @@
+{
+  "name": "fibi-socket",
+  "version": "1.0.0",
+  "description": "A socket based application for connecting different Fibi clients",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "redis": "^3.1.2",
+    "socket.io": "^4.2.0",
+    "ws": "^7.4.4"
+  },
+  "author": "Mahesh Sreenath V M",
+  "license": "ISC"
+}
