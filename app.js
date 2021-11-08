@@ -21,12 +21,12 @@ var io = socket (server, {
 });
 
 io.on ('connection', socket => {
-  socket.on ('joinGroup', socketData => {
+  socket.on ('getModuleLock', socketData => {
     socket.join (socketData.groupId);
     createOrAddGroup (socketData);
-    socket.to (socketData.groupId).emit ('joinEvent', socketData);
+    // socket.to (socketData.groupId).emit ('joinEvent', socketData);
   });
-  socket.on ('leaveGroup', socketData => {
+  socket.on ('releaseModuleLock', socketData => {
     client.get (socketData.groupId, function (err, redisData) {
       if (err) throw err;
       redisData = JSON.parse (redisData);
@@ -50,6 +50,18 @@ io.on ('connection', socket => {
     console.log (socketData);
     socket.to (socketData.groupId).emit ('receiveMessage', socketData);
   });
+  socket.on ('isModuleItemLocked', socketData => {
+    client.get (socketData, function (err, redisData) {
+      if (err) throw err;
+      io
+        .to (socket.id)
+        .emit ('isModuleItemLockedResponse', JSON.parse (redisData));
+    });
+  });
+});
+process.on ('exit', function () {
+  console.log ('helooo');
+  client.quit ();
 });
 
 function createOrAddGroup (socketData) {
