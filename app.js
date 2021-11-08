@@ -8,11 +8,11 @@ var server = app.listen (port, function () {
   console.log ('listening for requests on port 4000');
 });
 
-const client = redis.createClient ({
-  host: '127.0.0.1',
-  port: 6379,
-  password: process.env.REDIS_PASS,
-});
+// const client = redis.createClient ({
+//   host: '127.0.0.1',
+//   port: 6379,
+//   password: process.env.REDIS_PASS,
+// });
 
 var io = socket (server, {
   cors: {
@@ -23,7 +23,8 @@ var io = socket (server, {
 io.on ('connection', socket => {
   socket.on ('getModuleLock', socketData => {
     socket.join (socketData.groupId);
-    createOrAddGroup (socketData);
+    console.log ('working FIne');
+    // createOrAddGroup (socketData);
     // socket.to (socketData.groupId).emit ('joinEvent', socketData);
   });
   socket.on ('releaseModuleLock', socketData => {
@@ -51,12 +52,14 @@ io.on ('connection', socket => {
     socket.to (socketData.groupId).emit ('receiveMessage', socketData);
   });
   socket.on ('isModuleItemLocked', socketData => {
-    client.get (socketData, function (err, redisData) {
-      if (err) throw err;
-      io
-        .to (socket.id)
-        .emit ('isModuleItemLockedResponse', JSON.parse (redisData));
-    });
+    // client.get (socketData, function (err, redisData) {
+    //   if (err) throw err;
+    //   io
+    //     .to (socket.id)
+    //     .emit ('isModuleItemLockedResponse', JSON.parse (redisData));
+    // });
+    console.log (' request reached');
+    io.to (socket.id).emit ('isModuleItemLockedResponse', null);
   });
 });
 process.on ('exit', function () {
